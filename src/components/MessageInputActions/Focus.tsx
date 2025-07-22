@@ -5,6 +5,7 @@ import {
   Pencil,
   ScanEye,
   SwatchBook,
+  Stethoscope, // Add this if using lucide-react >= 0.312.0
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -53,6 +54,17 @@ const focusModes = [
     description: 'Search for discussions and opinions',
     icon: <SiReddit className="h-5 w-auto mr-0.5" />,
   },
+
+  ///////////////////////////
+  // --- Add the new Healthcare focus mode below ---
+  {
+    key: 'healthSearch',
+    title: 'Healthcare',
+    description: 'Focused search for healthcare and drug discovery',
+    icon: <Stethoscope size={20} />, // You can use any suitable icon if Stethoscope is not available
+  },
+
+  ///////////////////////////
 ];
 
 const Focus = ({
@@ -62,70 +74,52 @@ const Focus = ({
   focusMode: string;
   setFocusMode: (mode: string) => void;
 }) => {
-  return (
-    <Popover className="relative w-full max-w-[15rem] md:max-w-md lg:max-w-lg mt-[6.5px]">
-      <PopoverButton
-        type="button"
-        className=" text-black/50 dark:text-white/50 rounded-xl hover:bg-light-secondary dark:hover:bg-dark-secondary active:scale-95 transition duration-200 hover:text-black dark:hover:text-white"
-      >
-        {focusMode !== 'webSearch' ? (
-          <div className="flex flex-row items-center space-x-1">
-            {focusModes.find((mode) => mode.key === focusMode)?.icon}
-            <p className="text-xs font-medium hidden lg:block">
-              {focusModes.find((mode) => mode.key === focusMode)?.title}
-            </p>
-            <ChevronDown size={20} className="-translate-x-1" />
-          </div>
-        ) : (
-          <div className="flex flex-row items-center space-x-1">
-            <ScanEye size={20} />
-            <p className="text-xs font-medium hidden lg:block">Focus</p>
-          </div>
-        )}
-      </PopoverButton>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-150"
-        enterFrom="opacity-0 translate-y-1"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-1"
-      >
-        <PopoverPanel className="absolute z-10 w-64 md:w-[500px] left-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 bg-light-primary dark:bg-dark-primary border rounded-lg border-light-200 dark:border-dark-200 w-full p-4 max-h-[200px] md:max-h-none overflow-y-auto">
-            {focusModes.map((mode, i) => (
-              <PopoverButton
-                onClick={() => setFocusMode(mode.key)}
-                key={i}
-                className={cn(
-                  'p-2 rounded-lg flex flex-col items-start justify-start text-start space-y-2 duration-200 cursor-pointer transition',
-                  focusMode === mode.key
-                    ? 'bg-light-secondary dark:bg-dark-secondary'
-                    : 'hover:bg-light-secondary dark:hover:bg-dark-secondary',
-                )}
-              >
-                <div
-                  className={cn(
-                    'flex flex-row items-center space-x-1',
-                    focusMode === mode.key
-                      ? 'text-[#24A0ED]'
-                      : 'text-black dark:text-white',
-                  )}
-                >
-                  {mode.icon}
-                  <p className="text-sm font-medium">{mode.title}</p>
-                </div>
-                <p className="text-black/70 dark:text-white/70 text-xs">
-                  {mode.description}
-                </p>
-              </PopoverButton>
-            ))}
-          </div>
-        </PopoverPanel>
-      </Transition>
-    </Popover>
-  );
+ return (
+<Popover className="w-full">
+  <PopoverButton
+    className={cn(
+      "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-white/80 hover:text-yellow-300 hover:bg-[#222326]/40 transition",
+      "focus:outline-none"
+    )}
+  >
+    {/* Use main icon for the current focus mode */}
+    {focusModes.find(m => m.key === focusMode)?.icon}
+    <span className="">Focus</span>
+    <ChevronDown size={17} className="ml-auto text-yellow-300" />
+  </PopoverButton>
+  <Transition
+    as={Fragment}
+    enter="transition duration-100"
+    enterFrom="opacity-0 -translate-y-1"
+    enterTo="opacity-100 translate-y-0"
+    leave="transition duration-100"
+    leaveFrom="opacity-100 translate-y-0"
+    leaveTo="opacity-0 -translate-y-2"
+  >
+    <PopoverPanel className="w-full mt-1 rounded-md bg-[rgba(25,19,60,0.98)] border border-yellow-400/20 shadow-xl backdrop-blur-lg p-2 z-30">
+      <nav className="flex flex-col gap-1">
+        {focusModes.map((mode) => (
+          <button
+            key={mode.key}
+            onClick={() => setFocusMode(mode.key)}
+            className={cn(
+              "flex items-center gap-2 px-2 py-1.5 rounded-md text-sm w-full text-left",
+              focusMode === mode.key
+                ? "bg-yellow-400/10 text-yellow-200"
+                : "hover:bg-yellow-500/10 text-yellow-100/90"
+            )}
+          >
+            <span className={focusMode === mode.key ? 'text-yellow-300' : 'text-yellow-200/70'}>
+              {mode.icon}
+            </span>
+            <span>{mode.title}</span>
+          </button>
+        ))}
+      </nav>
+    </PopoverPanel>
+  </Transition>
+</Popover>
+);
 };
 
 export default Focus;

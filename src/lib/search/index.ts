@@ -2,6 +2,24 @@ import MetaSearchAgent from '@/lib/search/metaSearchAgent';
 import prompts from '../prompts';
 
 export const searchHandlers: Record<string, MetaSearchAgent> = {
+
+  //////////////////////////////////////
+   healthSearch: new MetaSearchAgent({
+    activeEngines: [
+    'pubmed',
+    'clinicaltrials',
+    'nih',
+  ], // Customize as needed
+    queryGeneratorPrompt: prompts.healthcareSearchRetrieverPrompt,
+    responsePrompt: prompts.healthcareSearchResponsePrompt,
+    rerank: true,
+    rerankThreshold: 0.3,
+    searchWeb: true,
+    summarizer: false,
+  }),
+
+
+  /////////////////////////////////////
   webSearch: new MetaSearchAgent({
     activeEngines: [],
     queryGeneratorPrompt: prompts.webSearchRetrieverPrompt,
@@ -12,7 +30,21 @@ export const searchHandlers: Record<string, MetaSearchAgent> = {
     summarizer: true,
   }),
   academicSearch: new MetaSearchAgent({
-    activeEngines: ['arxiv', 'google scholar', 'pubmed'],
+    // activeEngines: ['arxiv', 'google scholar', 'pubmed'],
+    activeEngines: [
+    'arxiv',
+    'google scholar',
+    'pubmed',
+    'springer',
+    'nature',
+    'biomedcentral',
+    'sciencedirect',
+    'medrxiv',
+    'biorxiv',
+    'clinicaltrials',
+    'drugbank',
+    'uniprot'
+  ],
     queryGeneratorPrompt: prompts.academicSearchRetrieverPrompt,
     responsePrompt: prompts.academicSearchResponsePrompt,
     rerank: true,

@@ -13,6 +13,7 @@ import {
   getCustomOpenaiModelName,
 } from '@/lib/config';
 import { searchHandlers } from '@/lib/search';
+import { spawn } from 'child_process';
 
 interface chatModel {
   provider: string;
@@ -37,6 +38,31 @@ interface ChatRequestBody {
   systemInstructions?: string;
 }
 
+// Function to call Python guardrail script
+async function checkGuardrail(action: string, text: string): Promise<{ isValid: boolean; message: string }> {
+  return new Promise((resolve, reject) => {
+    const pythonProcess = spawn('python3', ['guardrails/guardrail.py', action, text]);
+    let output = '';
+    let error = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      output += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      error += data.toString();
+    });
+
+    pythonProcess.on('close', (code) => {
+      if (code !== 0) {
+        return reject(new Error(`Guardrail script failed: ${error}`));
+      }
+      const [isValid, message] = output.trim().split('::');
+      resolve({ isValid: isValid === 'True', message });
+    });
+  });
+}
+
 export const POST = async (req: Request) => {
   try {
     const body: ChatRequestBody = await req.json();
@@ -46,6 +72,12 @@ export const POST = async (req: Request) => {
         { message: 'Missing focus mode or query' },
         { status: 400 },
       );
+    }
+
+    // Validate query
+    const queryCheck = await checkGuardrail('validate_query', body.query);
+    if (!queryCheck.isValid) {
+      return Response.json({ message: queryCheck.message }, { status: 400 });
     }
 
     body.history = body.history || [];
@@ -138,10 +170,21 @@ export const POST = async (req: Request) => {
           let message = '';
           let sources: any[] = [];
 
-          emitter.on('data', (data: string) => {
+          emitter.on('data', async (data: string) => {
             try {
               const parsedData = JSON.parse(data);
               if (parsedData.type === 'response') {
+                // Validate response
+                const responseCheck = await checkGuardrail('validate_response', parsedData.data);
+                if (!responseCheck.isValid) {
+                  reject(
+                    Response.json(
+                      { message: responseCheck.message },
+                      { status: 400 },
+                    ),
+                  );
+                  return;
+                }
                 message += parsedData.data;
               } else if (parsedData.type === 'sources') {
                 sources = parsedData.data;
@@ -192,19 +235,32 @@ export const POST = async (req: Request) => {
 
         signal.addEventListener('abort', () => {
           emitter.removeAllListeners();
-
           try {
             controller.close();
           } catch (error) {}
         });
 
-        emitter.on('data', (data: string) => {
+        emitter.on('data', async (data: string) => {
           if (signal.aborted) return;
 
           try {
             const parsedData = JSON.parse(data);
 
             if (parsedData.type === 'response') {
+              // Validate response
+              const responseCheck = await checkGuardrail('validate_response', parsedData.data);
+              if (!responseCheck.isValid) {
+                controller.enqueue(
+                  encoder.encode(
+                    JSON.stringify({
+                      type: 'error',
+                      data: responseCheck.message,
+                    }) + '\n',
+                  ),
+                );
+                controller.close();
+                return;
+              }
               controller.enqueue(
                 encoder.encode(
                   JSON.stringify({

@@ -12,7 +12,7 @@ const articleWebsites = [
   'venturebeat.com', */
 ];
 
-const topics = ['AI', 'tech']; /* TODO: Add UI to customize this */
+const topics = ['AI in Healthcare', 'Drug Discovery','Healthcare']; /* TODO: Add UI to customize this */
 
 export const GET = async (req: Request) => {
   try {
@@ -74,3 +74,4 @@ export const GET = async (req: Request) => {
     );
   }
 };
+

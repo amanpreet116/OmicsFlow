@@ -1,97 +1,153 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { BookOpenText, Home, Search, SquarePen, Settings } from 'lucide-react';
+import {
+  Compass,
+  History,
+  FlaskConical,
+  Dna,
+  UserCog,
+  LogOut,
+  Settings,
+  MessageCircle,
+  Star,
+  Bell,
+  BookOpenText,
+  Activity,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
-import React, { useState, type ReactNode } from 'react';
+import React, { useState } from 'react';
 import Layout from './Layout';
+import Focus from './MessageInputActions/Focus';
 
-const VerticalIconContainer = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="flex flex-col items-center gap-y-3 w-full">{children}</div>
-  );
-};
+const ExpertNav = [
+  { icon: FlaskConical, label: 'Chemist', href: '/expert/chemist' },
+  { icon: Dna, label: 'Omics', href: '/expert/omics' },
+  { icon: UserCog, label: 'Gene Analyst', href: '/expert/gene-analyst' },
+];
+
+const mainLinks = [
+  { icon: Compass, label: 'Explore', href: '/explore' },
+  { icon: MessageCircle, label: 'New Chat', href: '/' },
+  { icon: History, label: 'History', href: '/history' },
+  { icon: Activity, label: 'Activity', href: '/activity' },
+];
+
+// const quickAccessLinks = [
+//   { icon: Star, label: 'Favorites', href: '/favorites', color: 'text-yellow-400', hover: 'hover:bg-yellow-100 dark:hover:bg-yellow-800' },
+//   { icon: Bell, label: 'Notifications', href: '/notifications', color: 'text-yellow-100', hover: 'hover:bg-yellow-300 dark:hover:bg-yellow-900' },
+//   { icon: BookOpenText, label: 'Library', href: '/library', color: 'text-yellow-300', hover: 'hover:bg-yellow-200 dark:hover:bg-yellow-900' },
+// ];
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const segments = useSelectedLayoutSegments();
-
-  const navLinks = [
-    {
-      icon: Home,
-      href: '/',
-      active: segments.length === 0 || segments.includes('c'),
-      label: 'Home',
-    },
-    {
-      icon: Search,
-      href: '/discover',
-      active: segments.includes('discover'),
-      label: 'Discover',
-    },
-    {
-      icon: BookOpenText,
-      href: '/library',
-      active: segments.includes('library'),
-      label: 'Library',
-    },
-  ];
+  const [focusMode, setFocusMode] = useState('webSearch');
+  
 
   return (
-    <div>
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-20 lg:flex-col">
-        <div className="flex grow flex-col items-center justify-between gap-y-5 overflow-y-auto bg-light-secondary dark:bg-dark-secondary px-2 py-8">
-          <a href="/">
-            <SquarePen className="cursor-pointer" />
-          </a>
-          <VerticalIconContainer>
-            {navLinks.map((link, i) => (
+    <div className="flex min-h-screen bg-gradient-to-br from-[#131417] via-[#191919] to-[#0e0e11]">
+      {/* Responsive Sidebar: always visible, fits content */}
+      <aside
+        className="
+          flex flex-col justify-between
+          w-64 min-w-[220px] max-w-xs h-screen
+          backdrop-blur-xl bg-[rgba(30,30,35,0.56)]
+          border-r-2 border-yellow-400/90 shadow-2xl
+          px-4 md:px-6 py-8
+          rounded-tr-2xl rounded-br-2xl
+          transition-all
+          fixed z-30 top-0 left-0
+          overflow-hidden
+        "
+      >
+        <div>
+          {/* Logo/Brand */}
+          <div className="text-lg md:text-xl font-bold tracking-tight mb-5 flex items-center gap-2">
+            <span className="bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(255,214,0,0.5)]">OmicsFlow</span>
+          </div>
+
+          {/* Main Navigation */}
+          <nav className="flex flex-col gap-1">
+            {mainLinks.map(({ icon: Icon, label, href }) => (
               <Link
-                key={i}
-                href={link.href}
-                className={cn(
-                  'relative flex flex-row items-center justify-center cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 duration-150 transition w-full py-2 rounded-lg',
-                  link.active
-                    ? 'text-black dark:text-white'
-                    : 'text-black/70 dark:text-white/70',
-                )}
+                key={label}
+                href={href}
+                className="
+                  flex items-center gap-2 px-2 py-1.5 rounded-md
+                  text-sm text-white/90 hover:text-yellow-400
+                  hover:bg-[#23242a]/60 transition font-medium
+                "
               >
-                <link.icon />
-                {link.active && (
-                  <div className="absolute right-0 -mr-2 h-full w-1 rounded-l-lg bg-black dark:bg-white" />
-                )}
+                <Icon className="w-4 h-4" />
+                <span>{label}</span>
               </Link>
             ))}
-          </VerticalIconContainer>
+          </nav>
+          <div className="mt-4">
+            <Focus focusMode={focusMode} setFocusMode={setFocusMode} />
+          </div>
 
-          <Link href="/settings">
-            <Settings className="cursor-pointer" />
-          </Link>
+
+          {/* Experts Section */}
+          <div className="mt-5">
+            <div className="uppercase text-xs text-yellow-400/70 mb-1 font-semibold tracking-wide">Expert Agents</div>
+            <nav className="flex flex-col gap-1">
+              {ExpertNav.map(({ icon: Icon, label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className="
+                    flex items-center gap-2 px-2 py-1.5 rounded-md
+                    text-sm text-white/80 hover:text-yellow-300
+                    hover:bg-[#222326]/40 transition
+                  "
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{label}</span>
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Quick Access Section */}
+          {/* <div className="mt-5">
+            <div className="uppercase text-xs text-yellow-400/70 mb-1 font-semibold tracking-wide">Quick Access</div>
+            <nav className="flex flex-col gap-1">
+              {quickAccessLinks.map(({ icon: Icon, label, href, color, hover }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm ${color} font-medium ${hover} transition`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{label}</span>
+                </Link>
+              ))}
+            </nav>
+          </div> */}
         </div>
-      </div>
 
-      <div className="fixed bottom-0 w-full z-50 flex flex-row items-center gap-x-6 bg-light-primary dark:bg-dark-primary px-4 py-4 shadow-sm lg:hidden">
-        {navLinks.map((link, i) => (
+        {/* Settings & Log Out always inside container */}
+        <div className="flex flex-col gap-1 mt-4 pb-2">
           <Link
-            href={link.href}
-            key={i}
-            className={cn(
-              'relative flex flex-col items-center space-y-1 text-center w-full',
-              link.active
-                ? 'text-black dark:text-white'
-                : 'text-black dark:text-white/70',
-            )}
+            href="/settings"
+            className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-white/70 hover:text-yellow-400 hover:bg-[#212226]/40 transition"
           >
-            {link.active && (
-              <div className="absolute top-0 -mt-4 h-1 w-full rounded-b-lg bg-black dark:bg-white" />
-            )}
-            <link.icon />
-            <p className="text-xs">{link.label}</p>
+            <Settings className="w-4 h-4" />
+            <span>Settings</span>
           </Link>
-        ))}
-      </div>
+          <button className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-red-500 hover:bg-yellow-50/10 transition">
+            <LogOut className="w-4 h-4" />
+            <span>Log Out</span>
+          </button>
+        </div>
+      </aside>
 
-      <Layout>{children}</Layout>
+      {/* Main Content Area */}
+      <main className="flex-1 min-h-screen p-4 md:p-2 ml-56">
+        {children}
+      </main>
     </div>
   );
 };

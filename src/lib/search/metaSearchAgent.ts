@@ -1,3 +1,4 @@
+import { isDrugDiscoveryOrHealthcareQuery } from './domainGuard';
 import { ChatOpenAI } from '@langchain/openai';
 import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import type { Embeddings } from '@langchain/core/embeddings';
@@ -68,14 +69,8 @@ class MetaSearchAgent implements MetaSearchAgentType {
       llm,
       this.strParser,
       RunnableLambda.from(async (input: string) => {
-        const linksOutputParser = new LineListOutputParser({
-          key: 'links',
-        });
-
-        const questionOutputParser = new LineOutputParser({
-          key: 'question',
-        });
-
+        const linksOutputParser = new LineListOutputParser({ key: 'links' });
+        const questionOutputParser = new LineOutputParser({ key: 'question' });
         const links = await linksOutputParser.parse(input);
         let question = this.config.summarizer
           ? await questionOutputParser.parse(input)
@@ -86,39 +81,25 @@ class MetaSearchAgent implements MetaSearchAgentType {
         }
 
         if (links.length > 0) {
-          if (question.length === 0) {
-            question = 'summarize';
-          }
-
+          if (question.length === 0) question = 'summarize';
           let docs: Document[] = [];
-
           const linkDocs = await getDocumentsFromLinks({ links });
-
           const docGroups: Document[] = [];
-
           linkDocs.map((doc) => {
             const URLDocExists = docGroups.find(
               (d) =>
-                d.metadata.url === doc.metadata.url &&
-                d.metadata.totalDocs < 10,
+                d.metadata.url === doc.metadata.url && d.metadata.totalDocs < 10,
             );
-
             if (!URLDocExists) {
               docGroups.push({
                 ...doc,
-                metadata: {
-                  ...doc.metadata,
-                  totalDocs: 1,
-                },
+                metadata: { ...doc.metadata, totalDocs: 1 },
               });
             }
-
             const docIndex = docGroups.findIndex(
               (d) =>
-                d.metadata.url === doc.metadata.url &&
-                d.metadata.totalDocs < 10,
+                d.metadata.url === doc.metadata.url && d.metadata.totalDocs < 10,
             );
-
             if (docIndex !== -1) {
               docGroups[docIndex].pageContent =
                 docGroups[docIndex].pageContent + `\n\n` + doc.pageContent;
@@ -217,7 +198,7 @@ class MetaSearchAgent implements MetaSearchAgentType {
                   result.content ||
                   (this.config.activeEngines.includes('youtube')
                     ? result.title
-                    : '') /* Todo: Implement transcript grabbing using Youtubei (source: https://www.npmjs.com/package/youtubei) */,
+                    : ''),
                 metadata: {
                   title: result.title,
                   url: result.url,
@@ -246,10 +227,17 @@ class MetaSearchAgent implements MetaSearchAgentType {
         chat_history: (input: BasicChainInput) => input.chat_history,
         date: () => new Date().toISOString(),
         context: RunnableLambda.from(async (input: BasicChainInput) => {
-          const processedHistory = formatChatHistoryAsString(
-            input.chat_history,
-          );
+          // GUARDRAIL: Only allow drug discovery/healthcare queries
+          if (!isDrugDiscoveryOrHealthcareQuery(input.query)) {
+            return [
+              new Document({
+                pageContent: "Sorry, I can only answer questions related to drug discovery or healthcare.",
+                metadata: { title: "Guardrail", url: "" },
+              }),
+            ];
+          }
 
+          const processedHistory = formatChatHistoryAsString(input.chat_history);
           let docs: Document[] | null = null;
           let query = input.query;
 
@@ -282,7 +270,7 @@ class MetaSearchAgent implements MetaSearchAgentType {
           .pipe(this.processDocs),
       }),
       ChatPromptTemplate.fromMessages([
-        ['system', this.config.responsePrompt],
+        ['system', systemInstructions || this.config.responsePrompt],
         new MessagesPlaceholder('chat_history'),
         ['user', '{query}'],
       ]),
@@ -423,6 +411,18 @@ class MetaSearchAgent implements MetaSearchAgentType {
   }
 
   private processDocs(docs: Document[]) {
+    // Guardrail: If only one doc and it's the guardrail, just return the message
+    // and explicitly disable multimedia/images
+    if (
+      docs.length === 1 &&
+      docs[0].metadata &&
+      docs[0].metadata.title === "Guardrail"
+    ) {
+      return {
+        message: docs[0].pageContent,
+        multimedia: false, // Disable multimedia for guardrail responses
+      };
+    }
     return docs
       .map(
         (_, index) =>

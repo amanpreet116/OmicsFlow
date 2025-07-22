@@ -17,6 +17,16 @@ import {
   youtubeSearchRetrieverPrompt,
 } from './youtubeSearch';
 
+//////////////////////////////////////////////////////
+
+import {
+  healthcareSearchResponsePrompt,
+  healthcareSearchRetrieverPrompt,
+} from './healthcareSearch'; // <-- ADD THIS
+
+
+/////////////////////////////////////////////////////////
+
 export default {
   webSearchResponsePrompt,
   webSearchRetrieverPrompt,
@@ -29,4 +39,7 @@ export default {
   writingAssistantPrompt,
   youtubeSearchResponsePrompt,
   youtubeSearchRetrieverPrompt,
+
+  healthcareSearchRetrieverPrompt,
+  healthcareSearchResponsePrompt,
 };
