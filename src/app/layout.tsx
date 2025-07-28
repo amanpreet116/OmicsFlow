@@ -1,3 +1,5 @@
+'use client';
+
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
@@ -5,6 +7,7 @@ import { cn } from '@/lib/utils';
 import Sidebar from '@/components/Sidebar';
 import { Toaster } from 'sonner';
 import ThemeProvider from '@/components/theme/Provider';
+import { usePathname } from 'next/navigation';
 
 const montserrat = Montserrat({
   weight: ['300', '400', '500', '700'],
@@ -13,22 +16,31 @@ const montserrat = Montserrat({
   fallback: ['Arial', 'sans-serif'],
 });
 
-export const metadata: Metadata = {
-  title: 'Perplexica - Chat with the internet',
-  description:
-    'Perplexica is an AI powered chatbot that is connected to the internet.',
-};
+// Note: Move metadata to a separate metadata.ts file or page-level
+// since this will now be a client component
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  
+  // Routes where sidebar should be hidden
+  const noSidebarRoutes = ['/results','/'];
+  const shouldHideSidebar = noSidebarRoutes.includes(pathname);
+
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
       <body className={cn('h-full', montserrat.className)}>
         <ThemeProvider>
-          <Sidebar>{children}</Sidebar>
+          {!shouldHideSidebar ? (
+            <Sidebar>{children}</Sidebar>
+          ) : (
+            <div className="h-full">
+              {children}
+            </div>
+          )}
           <Toaster
             toastOptions={{
               unstyled: true,

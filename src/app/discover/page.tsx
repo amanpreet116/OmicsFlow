@@ -1,115 +1,201 @@
-'use client';
+"use client"
 
-import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { toast } from 'sonner';
+import { useState } from 'react';
+import { Sparkles, Search, Filter, ArrowRight } from 'lucide-react'; // Example icon set
 
-interface Discover {
-  title: string;
-  content: string;
-  url: string;
-  thumbnail: string;
-}
+const discoveries = [
+  {
+    id: 1,
+    title: "Alzheimer's Multi-Omics Biomarkers",
+    summary: "Pathway and biomarker discoveries using genomics, proteomics and metabolomics.",
+    type: "Genomics",
+    tags: ["Biomarkers", "Pathways", "Alzheimer's"],
+    date: "2025-07-10",
+    featured: true,
+    image: "/images/alzheimers.jpg",
+    aiAgents: ["Omics Expert", "Gene Analyst"],
+  },
+  {
+    id: 2,
+    title: "Novel COVID-19 Drug Target",
+    summary: "AI-predicted protein targets for antiviral therapy, validated across multiple datasets.",
+    type: "Drug Discovery",
+    tags: ["COVID-19", "Proteins", "Drug Target"],
+    date: "2025-07-05",
+    featured: false,
+    image: "/images/covid19.jpg",
+    aiAgents: ["Chemist", "Target Discovery"],
+  },
+  {
+    id: 3,
+    title: "BRCA1 Variant Clinical Insights",
+    summary: "Interpretation of BRCA1 gene variants linked to cancer susceptibility.",
+    type: "Clinical Genomics",
+    tags: ["BRCA1", "Cancer", "Variants"],
+    date: "2025-07-01",
+    featured: false,
+    image: "/images/brca1.jpg",
+    aiAgents: ["Gene Analyst", "Clinical Expert"],
+  },
+  {
+    id: 4,
+    title: "CRISPR Review: Cancer Therapy",
+    summary: "Synthesis of 127 latest papers on CRISPR applications in oncology.",
+    type: "Literature Review",
+    tags: ["CRISPR", "Oncology", "Review"],
+    date: "2025-06-29",
+    featured: false,
+    image: "/images/crispr.jpg",
+    aiAgents: ["Literature Reviewer", "Scientific Writer"],
+  },
+  // ... more discovery data
+];
 
-const Page = () => {
-  const [discover, setDiscover] = useState<Discover[] | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function DiscoverPage() {
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('All');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/discover`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+  const filteredDiscoveries = discoveries.filter(
+    disc =>
+      (filter === 'All' || disc.type === filter) &&
+      (disc.title.toLowerCase().includes(search.toLowerCase()) ||
+       disc.summary.toLowerCase().includes(search.toLowerCase()) ||
+       disc.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase())))
+  );
 
-        const data = await res.json();
+  // Safely extract the featured discovery once
+  const featuredDiscovery = filteredDiscoveries.find(d => d.featured);
 
-        if (!res.ok) {
-          throw new Error(data.message);
-        }
+  const categories = ['All', ...Array.from(new Set(discoveries.map(d => d.type)))];
 
-        data.blogs = data.blogs.filter((blog: Discover) => blog.thumbnail);
-
-        setDiscover(data.blogs);
-      } catch (err: any) {
-        console.error('Error fetching data:', err.message);
-        toast.error('Error fetching data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return loading ? (
-    <div className="flex flex-row items-center justify-center min-h-screen">
-      <svg
-        aria-hidden="true"
-        className="w-8 h-8 text-light-200 fill-light-secondary dark:text-[#202020] animate-spin dark:fill-[#ffffff3b]"
-        viewBox="0 0 100 101"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M100 50.5908C100.003 78.2051 78.1951 100.003 50.5908 100C22.9765 99.9972 0.997224 78.018 1 50.4037C1.00281 22.7993 22.8108 0.997224 50.4251 1C78.0395 1.00281 100.018 22.8108 100 50.4251ZM9.08164 50.594C9.06312 73.3997 27.7909 92.1272 50.5966 92.1457C73.4023 92.1642 92.1298 73.4365 92.1483 50.6308C92.1669 27.8251 73.4392 9.0973 50.6335 9.07878C27.8278 9.06026 9.10003 27.787 9.08164 50.594Z"
-          fill="currentColor"
-        />
-        <path
-          d="M93.9676 39.0409C96.393 38.4037 97.8624 35.9116 96.9801 33.5533C95.1945 28.8227 92.871 24.3692 90.0681 20.348C85.6237 14.1775 79.4473 9.36872 72.0454 6.45794C64.6435 3.54717 56.3134 2.65431 48.3133 3.89319C45.869 4.27179 44.3768 6.77534 45.014 9.20079C45.6512 11.6262 48.1343 13.0956 50.5786 12.717C56.5073 11.8281 62.5542 12.5399 68.0406 14.7911C73.527 17.0422 78.2187 20.7487 81.5841 25.4923C83.7976 28.5886 85.4467 32.059 86.4416 35.7474C87.1273 38.1189 89.5423 39.6781 91.9676 39.0409Z"
-          fill="currentFill"
-        />
-      </svg>
-    </div>
-  ) : (
-    <>
-      <div>
-        <div className="flex flex-col pt-4">
-          <div className="flex items-center">
-            <Search />
-            <h1 className="text-xl font-semibold bg-gradient-to-r from-yellow-400 to-yellow-100 bg-clip-text text-transparent tracking-wide">
-          Discover
-        </h1>
-          </div>
-          <hr className="border-t border-[#2B2C2C] my-4 w-full" />
+  return (
+    <div className="min-h-screen bg-black/95 text-white px-0 py-0 relative overflow-hidden ml-8">
+      {/* Header */}
+      <header className="py-10 px-8 flex flex-col md:flex-row gap-3 items-center justify-between border-b border-yellow-400/20 bg-black/30">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-300 to-white bg-clip-text text-transparent">
+            Discover Research
+          </h1>
+          <p className="text-yellow-100/70 text-lg mt-2">
+            Explore groundbreaking insights, AI-driven analyses, and top papers across domains
+          </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 pb-28 lg:pb-8 w-full justify-items-center lg:justify-items-start">
-          {discover &&
-            discover?.map((item, i) => (
-              <Link
-                href={`/?q=Summary: ${item.url}`}
-                key={i}
-                className="max-w-sm rounded-lg overflow-hidden bg-light-secondary dark:bg-dark-secondary hover:-translate-y-[1px] transition duration-200"
-                target="_blank"
+        <form
+          onSubmit={e => e.preventDefault()}
+          className="flex items-center gap-2 mt-4 md:mt-0"
+        >
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search discoveries, agents, tags..."
+            className="px-4 py-2 rounded-lg bg-black/40 border border-yellow-400/20 text-yellow-100 placeholder-yellow-100/50 focus:outline-none focus:border-yellow-400"
+          />
+          <button type="submit" className="p-2 bg-yellow-400/20 rounded-lg">
+            <Search className="w-5 h-5 text-yellow-400" />
+          </button>
+        </form>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* Filters */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors
+              ${filter === cat 
+                ? 'bg-yellow-400 text-black' 
+                : 'border border-yellow-400/30 text-yellow-400 hover:bg-yellow-400/10'}
+              `}
+            >
+              <Filter className="inline w-4 h-4 mr-2" /> {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Featured Discovery */}
+        {featuredDiscovery && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-yellow-300 mb-4">Featured Discovery</h2>
+            <div className="flex flex-col md:flex-row gap-6 bg-black/60 border border-yellow-400/20 rounded-xl p-6">
+              <img
+                src={featuredDiscovery.image}
+                alt={featuredDiscovery.title}
+                className="w-full md:w-60 h-40 object-cover rounded-lg"
+              />
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white mb-2">{featuredDiscovery.title}</h3>
+                <p className="text-yellow-100/80 mb-3">{featuredDiscovery.summary}</p>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {featuredDiscovery.tags.map(tag => (
+                    <span key={tag} className="bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs rounded-full px-3 py-1">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-xs text-yellow-100/40 mb-2">
+                  {featuredDiscovery.date}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {featuredDiscovery.aiAgents.map(agent => (
+                    <span key={agent} className="bg-black/60 border border-yellow-400/30 text-yellow-200 text-xs rounded-full px-3 py-1">
+                      {agent}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Discoveries Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredDiscoveries
+            .filter(d => !d.featured)
+            .map(discovery => (
+              <div
+                key={discovery.id}
+                className="bg-black/40 border border-yellow-400/10 rounded-xl p-5 hover:border-yellow-400/30 transition-colors flex flex-col"
               >
                 <img
-                  className="object-cover w-full aspect-video"
-                  src={
-                    new URL(item.thumbnail).origin +
-                    new URL(item.thumbnail).pathname +
-                    `?id=${new URL(item.thumbnail).searchParams.get('id')}`
-                  }
-                  alt={item.title}
+                  src={discovery.image}
+                  alt={discovery.title}
+                  className="h-32 w-full object-cover rounded-lg mb-4"
                 />
-                <div className="px-6 py-4">
-                  <div className="font-bold text-lg mb-2">
-                    {item.title.slice(0, 100)}...
-                  </div>
-                  <p className="text-black-70 dark:text-white/70 text-sm">
-                    {item.content.slice(0, 100)}...
-                  </p>
+                <h3 className="text-lg font-semibold text-white mb-1">{discovery.title}</h3>
+                <p className="text-yellow-100/70 text-sm mb-2">{discovery.summary}</p>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {discovery.tags.map(tag => (
+                    <span key={tag} className="bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs rounded-full px-2 py-1">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-              </Link>
-            ))}
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {discovery.aiAgents.map(agent => (
+                    <span key={agent} className="bg-black/60 border border-yellow-400/30 text-yellow-200 text-xs rounded-full px-2 py-1">
+                      {agent}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-xs text-yellow-100/40 mt-auto">{discovery.date}</div>
+                <button className="mt-3 px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 via-yellow-400/80 to-yellow-300 text-black font-semibold flex items-center gap-2 hover:scale-105 transition-transform">
+                  Explore <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+          ))}
         </div>
-      </div>
-    </>
-  );
-};
 
-export default Page;
+        {/* No Results State */}
+        {filteredDiscoveries.length === 0 && (
+          <div className="text-center text-yellow-200 py-12 text-xl">
+            No discoveries found. Try changing your search or filters.
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}

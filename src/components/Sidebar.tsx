@@ -14,142 +14,156 @@ import {
   Bell,
   BookOpenText,
   Activity,
+  FileText
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import React, { useState } from 'react';
-import Layout from './Layout';
 import Focus from './MessageInputActions/Focus';
 
+/* ---------- NAV DATA ---------- */
+
 const ExpertNav = [
-  { icon: FlaskConical, label: 'Chemist', href: '/expert/chemist' },
-  { icon: Dna, label: 'Omics', href: '/expert/omics' },
-  { icon: UserCog, label: 'Gene Analyst', href: '/expert/gene-analyst' },
+  { icon: FlaskConical, label: 'Chemist', href: '/search/chemist' },
+  { icon: Dna,           label: 'Omics',  href: '/search/omics' },
+  { icon: UserCog,       label: 'Gene Analyst',      href: '/search/gene-analyst' },
+  { icon: BookOpenText,  label: 'Report Generation', href: '/expert/literature-reviewer' },
 ];
 
 const mainLinks = [
-  { icon: Compass, label: 'Explore', href: '/explore' },
-  { icon: MessageCircle, label: 'New Chat', href: '/' },
-  { icon: History, label: 'History', href: '/history' },
-  { icon: Activity, label: 'Activity', href: '/activity' },
+  { icon: Compass,       label: 'Explore',  href: '/discover' },
+  { icon: MessageCircle, label: 'New Chat', href: '/home' },
+  { icon: History,       label: 'History',  href: '/history' },
+  { icon: Activity,      label: 'Activity', href: '/activity' },
+  { icon: FileText, label: 'Results', href: '/results' },
 ];
 
-// const quickAccessLinks = [
-//   { icon: Star, label: 'Favorites', href: '/favorites', color: 'text-yellow-400', hover: 'hover:bg-yellow-100 dark:hover:bg-yellow-800' },
-//   { icon: Bell, label: 'Notifications', href: '/notifications', color: 'text-yellow-100', hover: 'hover:bg-yellow-300 dark:hover:bg-yellow-900' },
-//   { icon: BookOpenText, label: 'Library', href: '/library', color: 'text-yellow-300', hover: 'hover:bg-yellow-200 dark:hover:bg-yellow-900' },
-// ];
+const quickAccessLinks = [
+  { icon: Star,        label: 'Favorites',     href: '/favorites'     },
+  { icon: Bell,        label: 'Notifications', href: '/notifications' },
+  { icon: BookOpenText,label: 'Library',       href: '/library'       },
+];
 
-const Sidebar = ({ children }: { children: React.ReactNode }) => {
+interface SidebarProps {
+  children: React.ReactNode;
+}
+
+export default function Sidebar({ children }: SidebarProps) {
   const segments = useSelectedLayoutSegments();
   const [focusMode, setFocusMode] = useState('webSearch');
-  
+
+  const isActive = (href: string) =>
+    segments.includes(href.replace(/^\//, '')) || (href === '/' && segments.length === 0);
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-[#131417] via-[#191919] to-[#0e0e11]">
-      {/* Responsive Sidebar: always visible, fits content */}
+      {/* --- STATIC SIDEBAR --- */}
       <aside
-        className="
-          flex flex-col justify-between
-          w-64 min-w-[220px] max-w-xs h-screen
-          backdrop-blur-xl bg-[rgba(30,30,35,0.56)]
-          border-r-2 border-yellow-400/90 shadow-2xl
-          px-4 md:px-6 py-8
-          rounded-tr-2xl rounded-br-2xl
-          transition-all
-          fixed z-30 top-0 left-0
-          overflow-hidden
-        "
+        className={cn(
+          'fixed top-0 left-0 h-screen z-40',
+          'w-72 min-w-[280px] bg-[rgba(30,30,35,0.56)] backdrop-blur-xl',
+          'border-r-2 border-yellow-400/90 shadow-2xl rounded-tr-2xl rounded-br-2xl',
+          'flex flex-col justify-between px-5 py-8 overflow-y-auto'
+        )}
       >
-        <div>
-          {/* Logo/Brand */}
-          <div className="text-lg md:text-xl font-bold tracking-tight mb-5 flex items-center gap-2">
-            <span className="bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(255,214,0,0.5)]">OmicsFlow</span>
-          </div>
+        <div className="space-y-6">
+<Link href="/home" className="cursor-pointer">
+  <div className="text-xl font-bold">
+    <span className="bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(255,214,0,0.5)] hover:from-yellow-300 hover:to-yellow-100 transition-all duration-300">
+      ResearchIQ
+    </span>
+  </div>
+</Link>
 
-          {/* Main Navigation */}
-          <nav className="flex flex-col gap-1">
+
+          <nav className="flex flex-col gap-1.5">
             {mainLinks.map(({ icon: Icon, label, href }) => (
               <Link
                 key={label}
                 href={href}
-                className="
-                  flex items-center gap-2 px-2 py-1.5 rounded-md
-                  text-sm text-white/90 hover:text-yellow-400
-                  hover:bg-[#23242a]/60 transition font-medium
-                "
+                className={cn(
+                  'flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                  isActive(href)
+                    ? 'text-yellow-400 bg-yellow-400/10 border-l-2 border-yellow-400'
+                    : 'text-white/90 hover:text-yellow-400 hover:bg-[#23242a]/60'
+                )}
               >
-                <Icon className="w-4 h-4" />
-                <span>{label}</span>
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {label}
               </Link>
             ))}
           </nav>
-          <div className="mt-4">
-            <Focus focusMode={focusMode} setFocusMode={setFocusMode} />
-          </div>
 
+          <Focus focusMode={focusMode} setFocusMode={setFocusMode} />
 
-          {/* Experts Section */}
-          <div className="mt-5">
-            <div className="uppercase text-xs text-yellow-400/70 mb-1 font-semibold tracking-wide">Expert Agents</div>
-            <nav className="flex flex-col gap-1">
+          <div>
+            <p className="uppercase text-xs text-yellow-400/70 font-semibold mb-1 tracking-wide">
+              Expert Agents
+            </p>
+            <nav className="flex flex-col gap-1.5">
               {ExpertNav.map(({ icon: Icon, label, href }) => (
                 <Link
                   key={label}
                   href={href}
-                  className="
-                    flex items-center gap-2 px-2 py-1.5 rounded-md
-                    text-sm text-white/80 hover:text-yellow-300
-                    hover:bg-[#222326]/40 transition
-                  "
+                  className={cn(
+                    'flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors',
+                    isActive(href)
+                      ? 'text-yellow-300 bg-yellow-400/10 border-l-2 border-yellow-400'
+                      : 'text-white/80 hover:text-yellow-300 hover:bg-[#222326]/40'
+                  )}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{label}</span>
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  {label}
                 </Link>
               ))}
             </nav>
           </div>
 
-          {/* Quick Access Section */}
-          {/* <div className="mt-5">
-            <div className="uppercase text-xs text-yellow-400/70 mb-1 font-semibold tracking-wide">Quick Access</div>
-            <nav className="flex flex-col gap-1">
-              {quickAccessLinks.map(({ icon: Icon, label, href, color, hover }) => (
+          <div>
+            <p className="uppercase text-xs text-yellow-400/70 font-semibold mb-1 tracking-wide">
+              Quick Access
+            </p>
+            <nav className="flex flex-col gap-1.5">
+              {quickAccessLinks.map(({ icon: Icon, label, href }) => (
                 <Link
                   key={label}
                   href={href}
-                  className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-sm ${color} font-medium ${hover} transition`}
+                  className={cn(
+                    'flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                    isActive(href)
+                      ? 'text-yellow-400 bg-yellow-400/10 border-l-2 border-yellow-400'
+                      : 'text-white/70 hover:text-yellow-200 hover:bg-white/5'
+                  )}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{label}</span>
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  {label}
                 </Link>
               ))}
             </nav>
-          </div> */}
+          </div>
         </div>
 
-        {/* Settings & Log Out always inside container */}
-        <div className="flex flex-col gap-1 mt-4 pb-2">
+        <div className="flex flex-col gap-1 pt-4 border-t border-gray-700/50">
           <Link
             href="/settings"
-            className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-white/70 hover:text-yellow-400 hover:bg-[#212226]/40 transition"
+            className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-white/70 hover:text-yellow-400 hover:bg-[#212226]/40 transition-colors"
           >
             <Settings className="w-4 h-4" />
-            <span>Settings</span>
+            Settings
           </Link>
-          <button className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-red-500 hover:bg-yellow-50/10 transition">
+          <button
+            className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+          >
             <LogOut className="w-4 h-4" />
-            <span>Log Out</span>
+            Log Out
           </button>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 min-h-screen p-4 md:p-2 ml-56">
+      {/* --- MAIN CONTENT --- */}
+      <main className="flex-1 min-h-screen ml-60">
         {children}
       </main>
     </div>
   );
-};
-
-export default Sidebar;
+}

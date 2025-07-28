@@ -62,36 +62,41 @@ const Chat = ({
   }, [messages]);
 
   return (
-    <div className="flex flex-col space-y-6 pt-8 pb-44 lg:pb-32 sm:mx-4 md:mx-8">
-      {messages.map((msg, i) => {
-        const isLast = i === messages.length - 1;
+  <div className="flex flex-col space-y-6 pt-8 pb-44 lg:pb-32 sm:mx-4 md:mx-8 lg:ml-72 xl:ml-80">
+    {messages.map((msg, i) => {
+      const isLast = i === messages.length - 1;
 
-        return (
-          <Fragment key={msg.messageId}>
-            <MessageBox
-              key={i}
-              message={msg}
-              messageIndex={i}
-              history={messages}
-              loading={loading}
-              dividerRef={isLast ? dividerRef : undefined}
-              isLast={isLast}
-              rewrite={rewrite}
-              sendMessage={sendMessage}
-            />
-            {!isLast && msg.role === 'assistant' && (
-              <div className="h-px w-full bg-light-secondary dark:bg-dark-secondary" />
-            )}
-          </Fragment>
-        );
-      })}
-      {loading && !messageAppeared && <MessageBoxLoading />}
-      <div ref={messageEnd} className="h-0" />
-      {dividerWidth > 0 && (
-        <div
-          className="bottom-24 lg:bottom-10 fixed z-40"
-          style={{ width: dividerWidth }}
-        >
+      return (
+        <Fragment key={msg.messageId}>
+          <MessageBox
+            key={i}
+            message={msg}
+            messageIndex={i}
+            history={messages}
+            loading={loading}
+            dividerRef={isLast ? dividerRef : undefined}
+            isLast={isLast}
+            rewrite={rewrite}
+            sendMessage={sendMessage}
+          />
+          {!isLast && msg.role === 'assistant' && (
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent" />
+          )}
+        </Fragment>
+      );
+    })}
+    {loading && !messageAppeared && <MessageBoxLoading />}
+    <div ref={messageEnd} className="h-0" />
+    {dividerWidth > 0 && (
+      <div
+        className="bottom-24 lg:bottom-10 fixed z-40 lg:ml-72 xl:ml-0"
+        style={{ width: dividerWidth }}
+      >
+        {/* Enhanced backdrop with glassmorphism effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent backdrop-blur-md border-t border-yellow-400/20 rounded-t-2xl shadow-2xl shadow-yellow-400/5" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/40 to-transparent" />
+        
+        <div className="relative ">
           <MessageInput
             loading={loading}
             sendMessage={sendMessage}
@@ -101,9 +106,11 @@ const Chat = ({
             setFiles={setFiles}
           />
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
+
 };
 
 export default Chat;

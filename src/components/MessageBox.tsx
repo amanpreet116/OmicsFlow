@@ -116,137 +116,151 @@ const MessageBox = ({
   };
 
   return (
-    <div>
-      {message.role === 'user' && (
-        <div
-          className={cn(
-            'w-full',
-            messageIndex === 0 ? 'pt-16' : 'pt-8',
-            'break-words',
-          )}
-        >
-          <h2 className="text-black dark:text-white font-medium text-3xl lg:w-9/12">
-            {message.content}
-          </h2>
-        </div>
-      )}
+  <div>
+    {message.role === 'user' && (
+      <div
+        className={cn(
+          'w-full',
+          messageIndex === 0 ? 'pt-16' : 'pt-8',
+          'break-words',
+        )}
+      >
+        <h2 className="text-yellow-100 font-medium text-3xl lg:w-9/12 leading-tight">
+          {message.content}
+        </h2>
+      </div>
+    )}
 
-      {message.role === 'assistant' && (
-        <div className="flex flex-col space-y-9 lg:space-y-0 lg:flex-row lg:justify-between lg:space-x-9">
-          <div
-            ref={dividerRef}
-            className="flex flex-col space-y-6 w-full lg:w-9/12"
-          >
-            {message.sources && message.sources.length > 0 && (
-              <div className="flex flex-col space-y-2">
-                <div className="flex flex-row items-center space-x-2">
-                  <BookCopy className="text-black dark:text-white" size={20} />
-                  <h3 className="text-black dark:text-white font-medium text-xl">
-                    Sources
-                  </h3>
-                </div>
-                <MessageSources sources={message.sources} />
-              </div>
-            )}
+    {message.role === 'assistant' && (
+      <div className="flex flex-col space-y-9 lg:space-y-0 lg:flex-row lg:justify-between lg:space-x-9">
+        <div
+          ref={dividerRef}
+          className="flex flex-col space-y-6 w-full lg:w-9/12"
+        >
+          {message.sources && message.sources.length > 0 && (
             <div className="flex flex-col space-y-2">
               <div className="flex flex-row items-center space-x-2">
-                <Disc3
-                  className={cn(
-                    'text-black dark:text-white',
-                    isLast && loading ? 'animate-spin' : 'animate-none',
-                  )}
-                  size={20}
-                />
-                <h3 className="text-black dark:text-white font-medium text-xl">
-                  Answer
+                <BookCopy className="text-yellow-400" size={20} />
+                <h3 className="text-yellow-100 font-medium text-xl">
+                  Sources
                 </h3>
               </div>
+              <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                <MessageSources sources={message.sources} />
+              </div>
+            </div>
+          )}
+          
+          <div className="flex flex-col space-y-2">
+            <div className="flex flex-row items-center space-x-2">
+              <Disc3
+                className={cn(
+                  'text-yellow-400',
+                  isLast && loading ? 'animate-spin' : 'animate-none',
+                )}
+                size={20}
+              />
+              <h3 className="text-yellow-100 font-medium text-xl">
+                Answer
+              </h3>
+            </div>
 
+            <div className="bg-black/20 border border-yellow-400/10 rounded-xl p-6 backdrop-blur-sm">
               <Markdown
                 className={cn(
-                  'prose prose-h1:mb-3 prose-h2:mb-2 prose-h2:mt-6 prose-h2:font-[800] prose-h3:mt-4 prose-h3:mb-1.5 prose-h3:font-[600] dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 font-[400]',
-                  'max-w-none break-words text-black dark:text-white',
+                  'prose prose-h1:mb-3 prose-h1:text-yellow-100 prose-h2:mb-2 prose-h2:mt-6 prose-h2:font-[800] prose-h2:text-yellow-200 prose-h3:mt-4 prose-h3:mb-1.5 prose-h3:font-[600] prose-h3:text-yellow-300 prose-p:leading-relaxed prose-pre:p-0 font-[400]',
+                  'prose-p:text-yellow-100/90 prose-li:text-yellow-100/90 prose-strong:text-yellow-300 prose-code:text-yellow-400 prose-code:bg-yellow-400/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded',
+                  'prose-blockquote:border-l-yellow-400/40 prose-blockquote:text-yellow-100/80',
+                  'max-w-none break-words text-yellow-100',
                 )}
                 options={markdownOverrides}
               >
                 {parsedMessage}
               </Markdown>
-              {loading && isLast ? null : (
-                <div className="flex flex-row items-center justify-between w-full text-black dark:text-white py-4 -mx-2">
-                  <div className="flex flex-row items-center space-x-1">
-                    {/*  <button className="p-2 text-black/70 dark:text-white/70 rounded-xl hover:bg-light-secondary dark:hover:bg-dark-secondary transition duration-200 hover:text-black text-black dark:hover:text-white">
-                      <Share size={18} />
-                    </button> */}
-                    <Rewrite rewrite={rewrite} messageId={message.messageId} />
-                  </div>
-                  <div className="flex flex-row items-center space-x-1">
-                    <Copy initialMessage={message.content} message={message} />
-                    <button
-                      onClick={() => {
-                        if (speechStatus === 'started') {
-                          stop();
-                        } else {
-                          start();
-                        }
-                      }}
-                      className="p-2 text-black/70 dark:text-white/70 rounded-xl hover:bg-light-secondary dark:hover:bg-dark-secondary transition duration-200 hover:text-black dark:hover:text-white"
-                    >
-                      {speechStatus === 'started' ? (
-                        <StopCircle size={18} />
-                      ) : (
-                        <Volume2 size={18} />
-                      )}
-                    </button>
-                  </div>
+            </div>
+
+            {loading && isLast ? null : (
+              <div className="flex flex-row items-center justify-between w-full text-yellow-100 py-4 -mx-2">
+                <div className="flex flex-row items-center space-x-1">
+                  <Rewrite rewrite={rewrite} messageId={message.messageId} />
                 </div>
-              )}
-              {isLast &&
-                message.suggestions &&
-                message.suggestions.length > 0 &&
-                message.role === 'assistant' &&
-                !loading && (
-                  <>
-                    <div className="h-px w-full bg-light-secondary dark:bg-dark-secondary" />
-                    <div className="flex flex-col space-y-3 text-black dark:text-white">
-                      <div className="flex flex-row items-center space-x-2 mt-4">
-                        <Layers3 />
-                        <h3 className="text-xl font-medium">Related</h3>
-                      </div>
-                      <div className="flex flex-col space-y-3">
-                        {message.suggestions.map((suggestion, i) => (
+                <div className="flex flex-row items-center space-x-1">
+                  <Copy initialMessage={message.content} message={message} />
+                  <button
+                    onClick={() => {
+                      if (speechStatus === 'started') {
+                        stop();
+                      } else {
+                        start();
+                      }
+                    }}
+                    className="p-2 text-yellow-100/70 rounded-xl hover:bg-yellow-400/10 border border-transparent hover:border-yellow-400/20 transition-all duration-200 hover:text-yellow-400 backdrop-blur-sm"
+                  >
+                    {speechStatus === 'started' ? (
+                      <StopCircle size={18} />
+                    ) : (
+                      <Volume2 size={18} />
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {isLast &&
+              message.suggestions &&
+              message.suggestions.length > 0 &&
+              message.role === 'assistant' &&
+              !loading && (
+                <>
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent" />
+                  <div className="flex flex-col space-y-3 text-yellow-100">
+                    <div className="flex flex-row items-center space-x-2 mt-4">
+                      <Layers3 className="text-yellow-400" />
+                      <h3 className="text-xl font-medium text-yellow-200">Related</h3>
+                    </div>
+                    <div className="flex flex-col space-y-3">
+                      {message.suggestions.map((suggestion, i) => (
+                        <div
+                          className="flex flex-col space-y-3 text-sm"
+                          key={i}
+                        >
+                          <div className="h-px w-full bg-gradient-to-r from-transparent via-yellow-400/15 to-transparent" />
                           <div
-                            className="flex flex-col space-y-3 text-sm"
-                            key={i}
+                            onClick={() => {
+                              sendMessage(suggestion);
+                            }}
+                            className="cursor-pointer flex flex-row justify-between font-medium space-x-2 items-center p-3 bg-black/20 border border-yellow-400/10 rounded-lg hover:bg-yellow-400/5 hover:border-yellow-400/20 transition-all duration-200 backdrop-blur-sm group"
                           >
-                            <div className="h-px w-full bg-light-secondary dark:bg-dark-secondary" />
-                            <div
-                              onClick={() => {
-                                sendMessage(suggestion);
-                              }}
-                              className="cursor-pointer flex flex-row justify-between font-medium space-x-2 items-center"
-                            >
-                              <p className="transition duration-200 hover:text-[#24A0ED]">
-                                {suggestion}
-                              </p>
+                            <p className="transition duration-200 group-hover:text-yellow-400 text-yellow-100/90">
+                              {suggestion}
+                            </p>
+                            <div className="p-1 bg-yellow-400/10 border border-yellow-400/20 rounded-full group-hover:bg-yellow-400/20 transition-all duration-200">
                               <Plus
-                                size={20}
-                                className="text-[#24A0ED] flex-shrink-0"
+                                size={16}
+                                className="text-yellow-400 flex-shrink-0"
                               />
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  </>
-                )}
-            </div>
+                  </div>
+                </>
+              )}
           </div>
-          <div className="lg:sticky lg:top-20 flex flex-col items-center space-y-3 w-full lg:w-3/12 z-30 h-full pb-4">
+        </div>
+        
+        <div className="lg:sticky lg:top-20 flex flex-col items-center space-y-3 w-full lg:w-3/12 z-30 h-full pb-4">
+          {/* Enhanced containers for search components */}
+          <div className="w-full bg-black/20 border border-yellow-400/10 rounded-xl backdrop-blur-sm">
             <SearchImages
               query={history[messageIndex - 1].content}
               chatHistory={history.slice(0, messageIndex - 1)}
               messageId={message.messageId}
             />
+          </div>
+          
+          <div className="w-full bg-black/20 border border-yellow-400/10 rounded-xl backdrop-blur-sm">
             <SearchVideos
               chatHistory={history.slice(0, messageIndex - 1)}
               query={history[messageIndex - 1].content}
@@ -254,9 +268,11 @@ const MessageBox = ({
             />
           </div>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
+
 };
 
 export default MessageBox;

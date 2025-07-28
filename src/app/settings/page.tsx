@@ -1,6 +1,6 @@
 'use client';
 
-import { Settings as SettingsIcon, ArrowLeft, Loader2, ChevronUp, User, Key, Bot, Search, Palette  } from 'lucide-react';
+import { Settings as SettingsIcon, ArrowLeft, Loader, ChevronUp, User, Key, Bot, Search, Palette  } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Switch } from '@headlessui/react';
@@ -47,7 +47,7 @@ const Input = ({ className, isSaving, onSave, ...restProps }: InputProps) => {
       />
       {isSaving && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-          <Loader2
+          <Loader
             size={16}
             className="animate-spin  text-[#f59e0b]"
           />
@@ -396,18 +396,18 @@ const Page = () => {
     }
   };
 
- return (
-  <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#0a0a0a] to-[#0f0f0f] min-h-screen">
+return (
+  <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#0e0e11] via-[#131417] to-[#232313] min-h-screen">
     <div className="flex flex-col pt-6 px-6">
       <div className="flex items-center space-x-3 mb-2">
-        <Link href="/" className="lg:hidden">
-          <ArrowLeft className="text-[#e5e5e5] hover:text-[#f59e0b] transition-colors duration-200" size={24} />
+        <Link href="/home" className="lg:hidden">
+          <ArrowLeft className="text-yellow-100 hover:text-yellow-400 transition-colors duration-200" size={24} />
         </Link>
         <div className="flex flex-row space-x-3 items-center">
-          <div className="p-2 bg-gradient-to-br from-[#f59e0b]/20 to-[#f59e0b]/10 rounded-lg backdrop-blur-sm border border-[#f59e0b]/30">
-            <SettingsIcon size={24} className="text-[#f59e0b]" />
+          <div className="p-2 bg-gradient-to-br from-yellow-400/20 to-yellow-400/10 rounded-lg backdrop-blur-sm border border-yellow-400/30">
+            <SettingsIcon size={24} className="text-yellow-400" />
           </div>
-          <h1 className="text-4xl font-bold text-[#e5e5e5] tracking-wide">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent tracking-wide">
             Settings
           </h1>
         </div>
@@ -415,20 +415,20 @@ const Page = () => {
       
       {/* Decorative divider with gradient */}
       <div className="relative w-full my-6">
-        <hr className="border-t border-[#2a2a2a] w-full" />
-        <div className="absolute left-0 top-0 w-24 h-px bg-gradient-to-r from-[#f59e0b] to-transparent"></div>
+        <hr className="border-t border-yellow-400/20 w-full" />
+        <div className="absolute left-0 top-0 w-24 h-px bg-gradient-to-r from-yellow-400 to-transparent"></div>
       </div>
     </div>
 
     {isLoading ? (
       <div className="flex flex-row items-center justify-center min-h-[50vh]">
         <div className="relative">
-          {/* Custom loading animation with OmicsFlow branding */}
-          <div className="w-16 h-16 border-4 border-[#2a2a2a] rounded-full animate-spin">
-            <div className="absolute inset-0 border-4 border-transparent border-t-[#f59e0b] rounded-full"></div>
+          {/* Custom loading animation with ResearchIQ branding */}
+          <div className="w-16 h-16 border-4 border-yellow-400/20 rounded-full animate-spin">
+            <div className="absolute inset-0 border-4 border-transparent border-t-yellow-400 rounded-full"></div>
           </div>
-          <div className="absolute inset-2 border-2 border-[#1a1a1a] rounded-full">
-            <div className="absolute inset-0 border-2 border-transparent border-b-[#f59e0b]/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          <div className="absolute inset-2 border-2 border-yellow-400/10 rounded-full">
+            <div className="absolute inset-0 border-2 border-transparent border-b-yellow-400/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
           </div>
         </div>
       </div>
@@ -437,10 +437,10 @@ const Page = () => {
         <div className="flex flex-col space-y-8 pb-32 lg:pb-12 px-6">
           {/* <SettingsSection title="Appearance">
             <div className="flex flex-col space-y-2">
-              <p className="text-[#a0a0a0] text-sm font-medium">
+              <p className="text-yellow-100/70 text-sm font-medium">
                 Theme Configuration
               </p>
-              <div className="p-4 bg-[#0a0a0a] rounded-lg border border-[#2a2a2a]">
+              <div className="p-4 bg-black/30 rounded-lg border border-yellow-400/20 backdrop-blur-sm">
                 <ThemeSwitcher />
               </div>
             </div>
@@ -448,19 +448,19 @@ const Page = () => {
 
           <SettingsSection title="Automatic Search">
             <div className="flex flex-col space-y-4">
-              <div className="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-lg hover:bg-[#0f0f0f] transition-all duration-300 border border-[#2a2a2a] hover:border-[#404040]">
+              <div className="flex items-center justify-between p-4 bg-black/30 rounded-lg hover:bg-black/40 transition-all duration-300 border border-yellow-400/20 hover:border-yellow-400/30 backdrop-blur-sm">
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-gradient-to-br from-[#f59e0b]/20 to-[#f59e0b]/10 rounded-lg border border-[#f59e0b]/30">
+                  <div className="p-3 bg-gradient-to-br from-yellow-400/20 to-yellow-400/10 rounded-lg border border-yellow-400/30">
                     <ImagesIcon
                       size={20}
-                      className="text-[#f59e0b]"
+                      className="text-yellow-400"
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-[#e5e5e5] font-semibold">
+                    <p className="text-sm text-yellow-100 font-semibold">
                       Automatic Image Search
                     </p>
-                    <p className="text-xs text-[#a0a0a0] mt-1 leading-relaxed">
+                    <p className="text-xs text-yellow-100/70 mt-1 leading-relaxed">
                       Automatically search for relevant scientific images in chat responses
                     </p>
                   </div>
@@ -473,35 +473,35 @@ const Page = () => {
                   }}
                   className={cn(
                     automaticImageSearch
-                      ? 'bg-gradient-to-r from-[#f59e0b] to-[#e59400]'
-                      : 'bg-[#2a2a2a]',
-                    'relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/50',
+                      ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg shadow-yellow-400/25'
+                      : 'bg-yellow-400/20 border border-yellow-400/30',
+                    'relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400/50',
                   )}
                 >
                   <span
                     className={cn(
                       automaticImageSearch
-                        ? 'translate-x-6'
-                        : 'translate-x-1',
-                      'inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-300',
+                        ? 'translate-x-6 bg-white'
+                        : 'translate-x-1 bg-yellow-100',
+                      'inline-block h-5 w-5 transform rounded-full shadow-lg transition-transform duration-300',
                     )}
                   />
                 </Switch>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-lg hover:bg-[#0f0f0f] transition-all duration-300 border border-[#2a2a2a] hover:border-[#404040]">
+              <div className="flex items-center justify-between p-4 bg-black/30 rounded-lg hover:bg-black/40 transition-all duration-300 border border-yellow-400/20 hover:border-yellow-400/30 backdrop-blur-sm">
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-gradient-to-br from-[#f59e0b]/20 to-[#f59e0b]/10 rounded-lg border border-[#f59e0b]/30">
+                  <div className="p-3 bg-gradient-to-br from-yellow-400/20 to-yellow-400/10 rounded-lg border border-yellow-400/30">
                     <VideoIcon
                       size={20}
-                      className="text-[#f59e0b]"
+                      className="text-yellow-400"
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-[#e5e5e5] font-semibold">
+                    <p className="text-sm text-yellow-100 font-semibold">
                       Automatic Video Search
                     </p>
-                    <p className="text-xs text-[#a0a0a0] mt-1 leading-relaxed">
+                    <p className="text-xs text-yellow-100/70 mt-1 leading-relaxed">
                       Automatically search for relevant educational videos in chat responses
                     </p>
                   </div>
@@ -514,17 +514,17 @@ const Page = () => {
                   }}
                   className={cn(
                     automaticVideoSearch
-                      ? 'bg-gradient-to-r from-[#f59e0b] to-[#e59400]'
-                      : 'bg-[#2a2a2a]',
-                    'relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/50',
+                      ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg shadow-yellow-400/25'
+                      : 'bg-yellow-400/20 border border-yellow-400/30',
+                    'relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400/50',
                   )}
                 >
                   <span
                     className={cn(
                       automaticVideoSearch
-                        ? 'translate-x-6'
-                        : 'translate-x-1',
-                      'inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-300',
+                        ? 'translate-x-6 bg-white'
+                        : 'translate-x-1 bg-yellow-100',
+                      'inline-block h-5 w-5 transform rounded-full shadow-lg transition-transform duration-300',
                     )}
                   />
                 </Switch>
@@ -534,17 +534,19 @@ const Page = () => {
 
           <SettingsSection title="System Instructions">
             <div className="flex flex-col space-y-3">
-              <p className="text-[#a0a0a0] text-sm font-medium">
+              <p className="text-yellow-100/70 text-sm font-medium">
                 Configure system behavior and instructions
               </p>
-              <Textarea
-                value={systemInstructions}
-                isSaving={savingStates['systemInstructions']}
-                onChange={(e) => {
-                  setSystemInstructions(e.target.value);
-                }}
-                onSave={(value) => saveConfig('systemInstructions', value)}
-              />
+              <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                <Textarea
+                  value={systemInstructions}
+                  isSaving={savingStates['systemInstructions']}
+                  onChange={(e) => {
+                    setSystemInstructions(e.target.value);
+                  }}
+                  onSave={(value) => saveConfig('systemInstructions', value)}
+                />
+              </div>
             </div>
           </SettingsSection>
 
@@ -552,55 +554,210 @@ const Page = () => {
             {config.chatModelProviders && (
               <div className="flex flex-col space-y-6">
                 <div className="flex flex-col space-y-2">
-                  <p className="text-[#a0a0a0] text-sm font-medium">
+                  <p className="text-yellow-100/70 text-sm font-medium">
                     Chat Model Provider
                   </p>
-                  <Select
-                    value={selectedChatModelProvider ?? undefined}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSelectedChatModelProvider(value);
-                      saveConfig('chatModelProvider', value);
-                      const firstModel =
-                        config.chatModelProviders[value]?.[0]?.name;
-                      if (firstModel) {
-                        setSelectedChatModel(firstModel);
-                        saveConfig('chatModel', firstModel);
-                      }
-                    }}
-                    options={Object.keys(config.chatModelProviders).map(
-                      (provider) => ({
-                        value: provider,
-                        label:
-                          (PROVIDER_METADATA as any)[provider]?.displayName ||
-                          provider.charAt(0).toUpperCase() +
-                            provider.slice(1),
-                      }),
-                    )}
-                  />
+                  <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                    <Select
+                      value={selectedChatModelProvider ?? undefined}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setSelectedChatModelProvider(value);
+                        saveConfig('chatModelProvider', value);
+                        const firstModel =
+                          config.chatModelProviders[value]?.[0]?.name;
+                        if (firstModel) {
+                          setSelectedChatModel(firstModel);
+                          saveConfig('chatModel', firstModel);
+                        }
+                      }}
+                      options={Object.keys(config.chatModelProviders).map(
+                        (provider) => ({
+                          value: provider,
+                          label:
+                            (PROVIDER_METADATA as any)[provider]?.displayName ||
+                            provider.charAt(0).toUpperCase() +
+                              provider.slice(1),
+                        }),
+                      )}
+                    />
+                  </div>
                 </div>
 
                 {selectedChatModelProvider &&
                   selectedChatModelProvider != 'custom_openai' && (
                     <div className="flex flex-col space-y-2">
-                      <p className="text-[#a0a0a0] text-sm font-medium">
+                      <p className="text-yellow-100/70 text-sm font-medium">
                         Chat Model
                       </p>
+                      <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                        <Select
+                          value={selectedChatModel ?? undefined}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedChatModel(value);
+                            saveConfig('chatModel', value);
+                          }}
+                          options={(() => {
+                            const chatModelProvider =
+                              config.chatModelProviders[
+                                selectedChatModelProvider
+                              ];
+                            return chatModelProvider
+                              ? chatModelProvider.length > 0
+                                ? chatModelProvider.map((model) => ({
+                                    value: model.name,
+                                    label: model.displayName,
+                                  }))
+                                : [
+                                    {
+                                      value: '',
+                                      label: 'No models available',
+                                      disabled: true,
+                                    },
+                                  ]
+                              : [
+                                  {
+                                    value: '',
+                                    label:
+                                      'Invalid provider, please check backend logs',
+                                    disabled: true,
+                                  },
+                                ];
+                          })()}
+                        />
+                      </div>
+                    </div>
+                  )}
+              </div>
+            )}
+
+            {selectedChatModelProvider &&
+              selectedChatModelProvider === 'custom_openai' && (
+                <div className="flex flex-col space-y-6">
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-yellow-100/70 text-sm font-medium">
+                      Model Name
+                    </p>
+                    <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                      <Input
+                        type="text"
+                        placeholder="Enter custom model name"
+                        value={config.customOpenaiModelName}
+                        isSaving={savingStates['customOpenaiModelName']}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setConfig((prev) => ({
+                            ...prev!,
+                            customOpenaiModelName: e.target.value,
+                          }));
+                        }}
+                        onSave={(value) =>
+                          saveConfig('customOpenaiModelName', value)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-yellow-100/70 text-sm font-medium">
+                      Custom OpenAI API Key
+                    </p>
+                    <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                      <Input
+                        type="password"
+                        placeholder="Enter your custom OpenAI API key"
+                        value={config.customOpenaiApiKey}
+                        isSaving={savingStates['customOpenaiApiKey']}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setConfig((prev) => ({
+                            ...prev!,
+                            customOpenaiApiKey: e.target.value,
+                          }));
+                        }}
+                        onSave={(value) =>
+                          saveConfig('customOpenaiApiKey', value)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-yellow-100/70 text-sm font-medium">
+                      Custom OpenAI Base URL
+                    </p>
+                    <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                      <Input
+                        type="text"
+                        placeholder="Enter custom OpenAI base URL"
+                        value={config.customOpenaiApiUrl}
+                        isSaving={savingStates['customOpenaiApiUrl']}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setConfig((prev) => ({
+                            ...prev!,
+                            customOpenaiApiUrl: e.target.value,
+                          }));
+                        }}
+                        onSave={(value) =>
+                          saveConfig('customOpenaiApiUrl', value)
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            {config.embeddingModelProviders && (
+              <div className="flex flex-col space-y-6 mt-6 pt-6 border-t border-yellow-400/20">
+                <div className="flex flex-col space-y-2">
+                  <p className="text-yellow-100/70 text-sm font-medium">
+                    Embedding Model Provider
+                  </p>
+                  <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                    <Select
+                      value={selectedEmbeddingModelProvider ?? undefined}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setSelectedEmbeddingModelProvider(value);
+                        saveConfig('embeddingModelProvider', value);
+                        const firstModel =
+                          config.embeddingModelProviders[value]?.[0]?.name;
+                        if (firstModel) {
+                          setSelectedEmbeddingModel(firstModel);
+                          saveConfig('embeddingModel', firstModel);
+                        }
+                      }}
+                      options={Object.keys(config.embeddingModelProviders).map(
+                        (provider) => ({
+                          value: provider,
+                          label:
+                            (PROVIDER_METADATA as any)[provider]?.displayName ||
+                            provider.charAt(0).toUpperCase() +
+                              provider.slice(1),
+                        }),
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {selectedEmbeddingModelProvider && (
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-yellow-100/70 text-sm font-medium">
+                      Embedding Model
+                    </p>
+                    <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
                       <Select
-                        value={selectedChatModel ?? undefined}
+                        value={selectedEmbeddingModel ?? undefined}
                         onChange={(e) => {
                           const value = e.target.value;
-                          setSelectedChatModel(value);
-                          saveConfig('chatModel', value);
+                          setSelectedEmbeddingModel(value);
+                          saveConfig('embeddingModel', value);
                         }}
                         options={(() => {
-                          const chatModelProvider =
-                            config.chatModelProviders[
-                              selectedChatModelProvider
+                          const embeddingModelProvider =
+                            config.embeddingModelProviders[
+                              selectedEmbeddingModelProvider
                             ];
-                          return chatModelProvider
-                            ? chatModelProvider.length > 0
-                              ? chatModelProvider.map((model) => ({
+                          return embeddingModelProvider
+                            ? embeddingModelProvider.length > 0
+                              ? embeddingModelProvider.map((model) => ({
                                   value: model.name,
                                   label: model.displayName,
                                 }))
@@ -622,147 +779,6 @@ const Page = () => {
                         })()}
                       />
                     </div>
-                  )}
-              </div>
-            )}
-
-            {selectedChatModelProvider &&
-              selectedChatModelProvider === 'custom_openai' && (
-                <div className="flex flex-col space-y-6">
-                  <div className="flex flex-col space-y-2">
-                    <p className="text-[#a0a0a0] text-sm font-medium">
-                      Model Name
-                    </p>
-                    <Input
-                      type="text"
-                      placeholder="Enter custom model name"
-                      value={config.customOpenaiModelName}
-                      isSaving={savingStates['customOpenaiModelName']}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setConfig((prev) => ({
-                          ...prev!,
-                          customOpenaiModelName: e.target.value,
-                        }));
-                      }}
-                      onSave={(value) =>
-                        saveConfig('customOpenaiModelName', value)
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    <p className="text-[#a0a0a0] text-sm font-medium">
-                      Custom OpenAI API Key
-                    </p>
-                    <Input
-                      type="password"
-                      placeholder="Enter your custom OpenAI API key"
-                      value={config.customOpenaiApiKey}
-                      isSaving={savingStates['customOpenaiApiKey']}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setConfig((prev) => ({
-                          ...prev!,
-                          customOpenaiApiKey: e.target.value,
-                        }));
-                      }}
-                      onSave={(value) =>
-                        saveConfig('customOpenaiApiKey', value)
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    <p className="text-[#a0a0a0] text-sm font-medium">
-                      Custom OpenAI Base URL
-                    </p>
-                    <Input
-                      type="text"
-                      placeholder="Enter custom OpenAI base URL"
-                      value={config.customOpenaiApiUrl}
-                      isSaving={savingStates['customOpenaiApiUrl']}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setConfig((prev) => ({
-                          ...prev!,
-                          customOpenaiApiUrl: e.target.value,
-                        }));
-                      }}
-                      onSave={(value) =>
-                        saveConfig('customOpenaiApiUrl', value)
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-
-            {config.embeddingModelProviders && (
-              <div className="flex flex-col space-y-6 mt-6 pt-6 border-t border-[#2a2a2a]">
-                <div className="flex flex-col space-y-2">
-                  <p className="text-[#a0a0a0] text-sm font-medium">
-                    Embedding Model Provider
-                  </p>
-                  <Select
-                    value={selectedEmbeddingModelProvider ?? undefined}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSelectedEmbeddingModelProvider(value);
-                      saveConfig('embeddingModelProvider', value);
-                      const firstModel =
-                        config.embeddingModelProviders[value]?.[0]?.name;
-                      if (firstModel) {
-                        setSelectedEmbeddingModel(firstModel);
-                        saveConfig('embeddingModel', firstModel);
-                      }
-                    }}
-                    options={Object.keys(config.embeddingModelProviders).map(
-                      (provider) => ({
-                        value: provider,
-                        label:
-                          (PROVIDER_METADATA as any)[provider]?.displayName ||
-                          provider.charAt(0).toUpperCase() +
-                            provider.slice(1),
-                      }),
-                    )}
-                  />
-                </div>
-
-                {selectedEmbeddingModelProvider && (
-                  <div className="flex flex-col space-y-2">
-                    <p className="text-[#a0a0a0] text-sm font-medium">
-                      Embedding Model
-                    </p>
-                    <Select
-                      value={selectedEmbeddingModel ?? undefined}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setSelectedEmbeddingModel(value);
-                        saveConfig('embeddingModel', value);
-                      }}
-                      options={(() => {
-                        const embeddingModelProvider =
-                          config.embeddingModelProviders[
-                            selectedEmbeddingModelProvider
-                          ];
-                        return embeddingModelProvider
-                          ? embeddingModelProvider.length > 0
-                            ? embeddingModelProvider.map((model) => ({
-                                value: model.name,
-                                label: model.displayName,
-                              }))
-                            : [
-                                {
-                                  value: '',
-                                  label: 'No models available',
-                                  disabled: true,
-                                },
-                              ]
-                          : [
-                              {
-                                value: '',
-                                label:
-                                  'Invalid provider, please check backend logs',
-                                disabled: true,
-                              },
-                            ];
-                      })()}
-                    />
                   </div>
                 )}
               </div>
@@ -772,136 +788,150 @@ const Page = () => {
           <SettingsSection title="API Keys">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col space-y-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   OpenAI API Key
                 </p>
-                <Input
-                  type="password"
-                  placeholder="Enter OpenAI API key"
-                  value={config.openaiApiKey}
-                  isSaving={savingStates['openaiApiKey']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      openaiApiKey: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('openaiApiKey', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="password"
+                    placeholder="Enter OpenAI API key"
+                    value={config.openaiApiKey}
+                    isSaving={savingStates['openaiApiKey']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        openaiApiKey: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('openaiApiKey', value)}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   Ollama API URL
                 </p>
-                <Input
-                  type="text"
-                  placeholder="Enter Ollama API URL"
-                  value={config.ollamaApiUrl}
-                  isSaving={savingStates['ollamaApiUrl']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      ollamaApiUrl: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('ollamaApiUrl', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="text"
+                    placeholder="Enter Ollama API URL"
+                    value={config.ollamaApiUrl}
+                    isSaving={savingStates['ollamaApiUrl']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        ollamaApiUrl: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('ollamaApiUrl', value)}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   GROQ API Key
                 </p>
-                <Input
-                  type="password"
-                  placeholder="Enter GROQ API key"
-                  value={config.groqApiKey}
-                  isSaving={savingStates['groqApiKey']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      groqApiKey: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('groqApiKey', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="password"
+                    placeholder="Enter GROQ API key"
+                    value={config.groqApiKey}
+                    isSaving={savingStates['groqApiKey']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        groqApiKey: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('groqApiKey', value)}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   Anthropic API Key
                 </p>
-                <Input
-                  type="password"
-                  placeholder="Enter Anthropic API key"
-                  value={config.anthropicApiKey}
-                  isSaving={savingStates['anthropicApiKey']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      anthropicApiKey: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('anthropicApiKey', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="password"
+                    placeholder="Enter Anthropic API key"
+                    value={config.anthropicApiKey}
+                    isSaving={savingStates['anthropicApiKey']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        anthropicApiKey: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('anthropicApiKey', value)}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   Gemini API Key
                 </p>
-                <Input
-                  type="password"
-                  placeholder="Enter Gemini API key"
-                  value={config.geminiApiKey}
-                  isSaving={savingStates['geminiApiKey']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      geminiApiKey: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('geminiApiKey', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="password"
+                    placeholder="Enter Gemini API key"
+                    value={config.geminiApiKey}
+                    isSaving={savingStates['geminiApiKey']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        geminiApiKey: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('geminiApiKey', value)}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   Deepseek API Key
                 </p>
-                <Input
-                  type="password"
-                  placeholder="Enter Deepseek API key"
-                  value={config.deepseekApiKey}
-                  isSaving={savingStates['deepseekApiKey']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      deepseekApiKey: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('deepseekApiKey', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="password"
+                    placeholder="Enter Deepseek API key"
+                    value={config.deepseekApiKey}
+                    isSaving={savingStates['deepseekApiKey']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        deepseekApiKey: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('deepseekApiKey', value)}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2 md:col-span-2">
-                <p className="text-[#a0a0a0] text-sm font-medium">
+                <p className="text-yellow-100/70 text-sm font-medium">
                   LM Studio API URL
                 </p>
-                <Input
-                  type="text"
-                  placeholder="Enter LM Studio API URL"
-                  value={config.lmStudioApiUrl}
-                  isSaving={savingStates['lmStudioApiUrl']}
-                  onChange={(e) => {
-                    setConfig((prev) => ({
-                      ...prev!,
-                      lmStudioApiUrl: e.target.value,
-                    }));
-                  }}
-                  onSave={(value) => saveConfig('lmStudioApiUrl', value)}
-                />
+                <div className="bg-black/30 border border-yellow-400/20 rounded-lg backdrop-blur-sm">
+                  <Input
+                    type="text"
+                    placeholder="Enter LM Studio API URL"
+                    value={config.lmStudioApiUrl}
+                    isSaving={savingStates['lmStudioApiUrl']}
+                    onChange={(e) => {
+                      setConfig((prev) => ({
+                        ...prev!,
+                        lmStudioApiUrl: e.target.value,
+                      }));
+                    }}
+                    onSave={(value) => saveConfig('lmStudioApiUrl', value)}
+                  />
+                </div>
               </div>
             </div>
           </SettingsSection>
@@ -910,6 +940,7 @@ const Page = () => {
     )}
   </div>
 );
+
 };
 
 export default Page;
